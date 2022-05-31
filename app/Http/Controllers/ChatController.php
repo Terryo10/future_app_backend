@@ -48,7 +48,7 @@ class ChatController extends Controller
 
             return ChatResource::make($chat);
 
-        }else{
+        } else {
             $activeChat = $chats->first();
             $message = new Messages();
             $message->chat_id = $activeChat->id;
@@ -58,10 +58,12 @@ class ChatController extends Controller
 
             return ChatResource::make($activeChat);
         }
-
-
-
     }
 
+    public function getChats(){
+        $user = Auth::user();
+        $chats = Chat::where('user_1', '=', $user->id)->orWhere('user_2', '=', $user->id)->get();
+        return ChatResource::collection($chats);
+    }
 
 }
