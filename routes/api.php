@@ -22,6 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/send_message', [ChatController::class, 'sendMessage'])->middleware('auth:sanctum');
 Route::get('/my_chats', [ChatController::class, 'getChats'])->middleware('auth:sanctum');
+Route::get('/search_users', [ChatController::class, 'searchUsers'])->middleware('auth:sanctum');
+
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);

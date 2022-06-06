@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ChatResource;
 use App\Models\Chat;
 use App\Models\Messages;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -46,7 +47,8 @@ class ChatController extends Controller
             $message->message = $request->input('message');
             $message->save();
 
-            return ChatResource::make($chat);
+            $chatt = Chat::where('user_1', '=', $user->id)->orWhere('user_2', '=', $user->id)->get();
+            return ChatResource::collection($chatt);
 
         } else {
             $activeChat = $chats->first();
@@ -56,14 +58,24 @@ class ChatController extends Controller
             $message->message = $request->input('message');
             $message->save();
 
-            return ChatResource::make($activeChat);
+            $chatt = Chat::where('user_1', '=', $user->id)->orWhere('user_2', '=', $user->id)->get();
+            return ChatResource::collection($chatt);
         }
     }
 
-    public function getChats(){
+    public function getChats()
+    {
         $user = Auth::user();
         $chats = Chat::where('user_1', '=', $user->id)->orWhere('user_2', '=', $user->id)->get();
         return ChatResource::collection($chats);
     }
+
+    public function searchUsers(Request $request)
+    {
+        $query = $request->input('query');
+        $searchResult = User::where('name', 'LIKE', '%' . $query . '%')
+            ->orWhere('email', 'LIKE', '%' . $query . '%')->get();
+        return response(['users' => $searchResult, 'success' => true]);
+  }
 
 }
