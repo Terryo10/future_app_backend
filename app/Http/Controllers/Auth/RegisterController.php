@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\DeviceToken;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -11,6 +12,7 @@ class RegisterController extends Controller
 {
     public function register(Request $request)
     {
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -18,6 +20,7 @@ class RegisterController extends Controller
                 'email' => 'required|email',
                 'password' => 'required|alpha_num|min:5',
                 'confirm_password' => 'required|same:password',
+                'token' => 'required'
             ]
         );
 
@@ -38,6 +41,12 @@ class RegisterController extends Controller
         $user = User::create($input);
         $accessToken = $user->createToken('authToken')->plainTextToken;
         $presentedUser = User::find($user)->first();
+        //save deviceToken
+        $deviceToken = new DeviceToken;
+        $deviceToken->user_id = $presentedUser->id;
+        $deviceToken->device_token = $request->input('token');
+        $deviceToken->save();
+
         return response(['user' => $presentedUser, 'token' => $accessToken, 'success' => true, 'message' => 'Registered successfully']);
     }
 }

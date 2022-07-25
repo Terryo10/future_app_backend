@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('chats', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_1');
+            $table->unsignedBigInteger('user_2');
+            $table->foreign('user_1')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_2')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
