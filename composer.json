@@ -6,8 +6,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "ext-curl": "*",
+        "botman/botman": "^2.7",
+        "botman/driver-web": "^1.5",
+        "encore/laravel-admin": "^1.8",
         "guzzlehttp/guzzle": "^7.2",
+        "laravel-admin-ext/ckeditor": "^1.0",
         "laravel/framework": "^9.11",
+        "laravel/helpers": "^1.5",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7"
     },
